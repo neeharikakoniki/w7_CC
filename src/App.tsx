@@ -1,11 +1,13 @@
-import AppLayout from "./layouts/AppLayout";
+import AppLayout from './layouts/AppLayout';
+import ProductGrid from './components/ProductGrid';
+import { products } from './data/products';
+
 function App() {
-  
-  return  (
+  return (
     <AppLayout>
-      <div>Coming back </div>
+      <ProductGrid products={products} />
     </AppLayout>
-  )
+  );
 }
 
-export default App
+export default App;

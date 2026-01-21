@@ -1,17 +1,31 @@
-import Header from "../components/Header";
-import type { ReactNode } from "react";
-
+import type { ReactNode } from 'react';
+import Header from '../components/Header';
 
 type AppLayoutProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-function AppLayout({children}:AppLayoutProps) {
+function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div>
-     <Header/>
+    <div style={styles.container}>
+      <Header />
+      <main style={styles.main}>{children}</main>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column' as const,
+  },
+  main: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+};
 
 export default AppLayout;
