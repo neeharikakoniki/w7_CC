@@ -6,20 +6,18 @@ type ProductGridProps = {
   products: Product[];
 };
 
-const [selectedId, setSelectedId] = useState<string | null>(null);
-
-
 function ProductGrid({ products }: ProductGridProps) {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
   return (
     <div style={styles.grid}>
       {products.map((product) => (
-       <ProductCard
-  key={product.id}
-  product={product}
-  isSelected={product.id === selectedId}
-  onSelect={setSelectedId}
-/>
-
+        <ProductCard
+          key={product.id}
+          product={product}
+          isSelected={product.id === selectedId}
+          onSelect={setSelectedId}
+        />
       ))}
     </div>
   );
@@ -28,7 +26,7 @@ function ProductGrid({ products }: ProductGridProps) {
 const styles = {
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
     gap: '16px',
   },
 };

@@ -22,9 +22,7 @@ const styles = {
   },
   main: {
     flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: '24px',
   },
 };
 

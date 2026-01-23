@@ -3,32 +3,23 @@ import type { Product } from '../types/product';
 export const products: Product[] = [
   {
     id: '1',
-    name: 'Basic T-Shirt',
-    image: 'https://picsum.photos/300/200',
-    category: 'Clothing',
+    name: 'Samsung QLED',
+    image: 'https://picsum.photos/300/200?1',
+    category: 'TV',
     variants: [
-      { size: 38, price: 19.99 },
-      { size: 40, price: 21.99 },
+      { size: 66, price: 1200 },
+      { size: 77, price: 1600 },
+      { size: 88, price: 2100 },
     ],
   },
   {
     id: '2',
-    name: 'Running Shoes',
-    image: 'https://picsum.photos/300/200',
-    category: 'Footwear',
+    name: 'LG OLED',
+    image: 'https://picsum.photos/300/200?2',
+    category: 'TV',
     variants: [
-      { size: 9, price: 59.99 },
-      { size: 10, price: 64.99 },
-    ],
-  },
-  {
-    id: '3',
-    name: 'Backpack',
-    image: 'https://picsum.photos/300/200',
-    category: 'Accessories',
-    variants: [
-      { size: 20, price: 39.99 },
-      { size: 25, price: 44.99 },
+      { size: 55, price: 1400 },
+      { size: 65, price: 1800 },
     ],
   },
 ];
