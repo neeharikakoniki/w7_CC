@@ -2,6 +2,8 @@ import { useState } from 'react';
 import type { Product } from '../types/product';
 import VariantSelector from './VariantSelector';
 import PriceLabel from './PriceLabel';
+import { useMemo, useCallback } from 'react';
+
 
 type ProductCardProps = {
   product: Product;
@@ -11,7 +13,17 @@ type ProductCardProps = {
 
 function ProductCard({ product, isSelected, onSelect }: ProductCardProps) {
   const [variantIndex, setVariantIndex] = useState<number>(0);
-  const selectedVariant = product.variants[variantIndex];
+
+
+  const { displayName, price } = useMemo(() => {
+    const variant = product.variants[variantIndex];
+    return {
+      displayName: `${product.name} ${variant.size}"`,
+      price: variant.price,
+    };
+
+  }, [product, variantIndex]);
+
 
   return (
     <div
@@ -27,11 +39,10 @@ function ProductCard({ product, isSelected, onSelect }: ProductCardProps) {
         style={styles.image}
       />
 
-      <h3>
-        {product.name} {selectedVariant.size}"
-      </h3>
+      <h3>{displayName}</h3>
 
-      <PriceLabel price={selectedVariant.price} />
+
+      <PriceLabel price={price} />
 
       <VariantSelector
         variants={product.variants}
