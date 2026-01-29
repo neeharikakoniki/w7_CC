@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import type { Product } from '../types/product';
+import VariantSelector from './VariantSelector';
+import PriceLabel from './PriceLabel';
 
 type ProductCardProps = {
   product: Product;
@@ -15,7 +17,7 @@ function ProductCard({ product, isSelected, onSelect }: ProductCardProps) {
     <div
       style={{
         ...styles.card,
-        ...(isSelected ? styles.selected : styles.notSelected),
+        ...(isSelected ? styles.selected : styles.unselected),
       }}
       onClick={() => onSelect(product.id)}
     >
@@ -29,27 +31,13 @@ function ProductCard({ product, isSelected, onSelect }: ProductCardProps) {
         {product.name} {selectedVariant.size}"
       </h3>
 
-      <p>${selectedVariant.price}</p>
+      <PriceLabel price={selectedVariant.price} />
 
-      <div style={styles.variantContainer}>
-        {product.variants.map((variant, index) => (
-          <button
-            key={variant.size}
-            onClick={(e) => {
-              e.stopPropagation();
-              setVariantIndex(index);
-            }}
-            style={{
-              ...styles.variantButton,
-              ...(index === variantIndex
-                ? styles.variantSelected
-                : styles.variantUnselected),
-            }}
-          >
-            {variant.size}
-          </button>
-        ))}
-      </div>
+      <VariantSelector
+        variants={product.variants}
+        selectedIndex={variantIndex}
+        onChange={setVariantIndex}
+      />
     </div>
   );
 }
@@ -59,15 +47,15 @@ const styles = {
     padding: '16px',
     borderRadius: '8px',
     border: '2px solid transparent',
+    backgroundColor: '#ffffff',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
-    backgroundColor: '#fff',
   },
   selected: {
     borderColor: '#2563eb',
     backgroundColor: '#eff6ff',
   },
-  notSelected: {
+  unselected: {
     borderColor: '#e5e7eb',
   },
   image: {
@@ -75,26 +63,6 @@ const styles = {
     height: '150px',
     objectFit: 'cover' as const,
     marginBottom: '12px',
-  },
-  variantContainer: {
-    display: 'flex',
-    gap: '8px',
-    marginTop: '12px',
-  },
-  variantButton: {
-    padding: '6px 10px',
-    borderRadius: '6px',
-    border: '1px solid #e5e7eb',
-    cursor: 'pointer',
-  },
-  variantSelected: {
-    backgroundColor: '#2563eb',
-    color: '#fff',
-    borderColor: '#2563eb',
-  },
-  variantUnselected: {
-    backgroundColor: '#fff',
-    color: '#000',
   },
 };
 
