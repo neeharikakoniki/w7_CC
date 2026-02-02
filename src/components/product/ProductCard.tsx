@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import type { Product } from '../types/product';
+import type  { Product } from '../../types/product';
 import VariantSelector from './VariantSelector';
 import PriceLabel from './PriceLabel';
 import { useMemo } from 'react';
+import { products } from '../../data/products';
 
-type AddToCartPayload={
+export type AddToCartPayload={
    productId: string;
     baseName: string;
     size: number;
@@ -13,75 +14,74 @@ type AddToCartPayload={
 
 type ProductCardProps = {
   product: Product;
-  isSelected: boolean;
-  onSelect: (id: string) => void;
   onAddToCart: (payload: AddToCartPayload) =>void;
 };
 
-
-
-function ProductCard({ product, isSelected, onSelect, onAddToCart }: ProductCardProps) {
-  const [variantIndex, setVariantIndex] = useState<number>(0);
-
-
-  const { displayName, price, size } = useMemo(() => {
+export const ProductCard: React.FC<ProductCardProps>=({
+product,
+onAddToCart,})=>{
+  const[ variantIndex, setVariantIndex] = useState(0);
+  const hasVariants= product.variants.length >0 ;
+  const derived = useMemo(()=>
+  {
+    if(!hasVariants)
+    {
+      return null;
+    }
     const variant = product.variants[variantIndex];
     return {
       displayName: `${product.name} ${variant.size}"`,
       price: variant.price,
       size: variant.size,
     };
+  },[products, variantIndex, hasVariants]);
 
-  }, [product, variantIndex]);
+  const handleAddToCart=()=>{
+    if(!derived)
+    {
+      return ;
+    }
 
-  const handleAddToCart = () =>{
     onAddToCart({
       productId: product.id,
-      baseName: product.name,
-      size,
-      price,
+      baseName:product.name,
+      size:derived.size,
+      price:derived.price,
     });
   };
-
-
-
-
-  return (
+ return (
     <div
       style={{
         ...styles.card,
-        ...(isSelected ? styles.selected : styles.unselected),
       }}
-      onClick={() => onSelect(product.id)}
-    >
-      <img
-        src={product.image}
-        alt={product.name}
-        style={styles.image}
-      />
-
-      <h3>{displayName}</h3>
-
-
-      <PriceLabel price={price} />
-
+      >
+      <h3>{derived ? derived.displayName: product.name}</h3>
       <VariantSelector
-        variants={product.variants}
-        selectedIndex={variantIndex}
-        onChange={setVariantIndex}
+      variants={product.variants}
+      selectedIndex={variantIndex}
+      onChange={setVariantIndex}
       />
+
+    
       <button
-        style = {styles.addButton}
-        onClick={(e) =>{
-          e.stopPropagation();
-          handleAddToCart();
-        }}
+        onClick={handleAddToCart}
+        disabled={!derived}
         >
           Add to Cart
         </button>
     </div>
   );
+
+
 }
+
+
+
+
+
+
+  
+
 
 const styles = {
   card: {
