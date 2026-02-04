@@ -1,6 +1,4 @@
-// src/pages/ProductsPage.tsx
-
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { fetchProducts, type Product } from "../api/productsApi";
 import {ProductGrid} from "../components/ProductGrid";
 
@@ -10,44 +8,65 @@ export function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [skip, setSkip] = useState<number>(0);
+  const [ hasMore,setHasMore] = useState<boolean>(true);
 
-  useEffect(() => {
-    let isMounted = true;
 
-    async function loadProducts() {
-      try {
-        setLoading(true);
-        const result = await fetchProducts(PAGE_SIZE, 0);
-        if (isMounted) {
-          setProducts(result);
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(
-            err instanceof Error ? err.message : "Unknown error occurred"
-          );
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
+
+
+  async function loadNextPage(): Promise<void>
+  {
+    if(loading) return;
+    if(!hasMore) return;
+
+  setLoading(true);
+  setError(null);
+
+  try{
+    const newProducts= await fetchProducts(PAGE_SIZE, skip);
+    setProducts(prev => [...prev, ...newProducts]);
+
+    if(newProducts.length < PAGE_SIZE)
+    {
+      setHasMore(false);
     }
-
-    loadProducts();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  if (loading) {
-    return <div>Loading products…</div>;
+    else{
+      setSkip(prevSkip=>prevSkip + PAGE_SIZE);
+    }
   }
+  catch(err){
+    setError(
+      err instanceof Error ? err.message: "Unknown error occurred"
+    );
 
-  if (error) {
-    return <div>Failed to load products: {error}</div>;
   }
+   finally{
+    setLoading(false);
+   }
+}
 
-  return <ProductGrid products={products} />;
+useEffect(()=>{
+  loadNextPage();
+},[]);
+
+
+return (
+  <div>
+    {products.length=== 0 &&loading &&(
+      <div> Loading Products..
+</div>    )}
+
+{error && <div> {error}</div>}
+<ProductGrid products={products}/>
+{hasMore && (
+  <div style = {{marginTop:16}}>
+    <button onClick={loadNextPage} disabled= {loading}>
+      {loading ? "Loading": "Load More"}
+
+    </button>
+    </div>
+)}
+  </div>
+
+);
 }
