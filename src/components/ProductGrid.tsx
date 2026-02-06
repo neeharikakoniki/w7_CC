@@ -7,13 +7,10 @@ import type {AddToCartPayload} from "./product/ProductCard";
 type ProductGridProps = {
   products: Product[];
 };
-
-
 export const ProductGrid: React.FC<ProductGridProps> = ({products}) =>{
  const handleAddToCart = (payload: AddToCartPayload): void => {
     console.log(payload);
   };
-
 
   return (
     <div style={styles.grid}>

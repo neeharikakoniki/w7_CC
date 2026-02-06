@@ -55,6 +55,12 @@ onAddToCart,})=>{
         ...styles.card,
       }}
       >
+        <img
+        src={product.image}
+        alt= {product.name}
+        style={styles.image}
+        
+        />
       <h3>{derived ? derived.displayName: product.name}</h3>
       <VariantSelector
       variants={product.variants}
@@ -66,6 +72,7 @@ onAddToCart,})=>{
       <button
         onClick={handleAddToCart}
         disabled={!derived}
+        style={styles.addButton}
         >
           Add to Cart
         </button>
@@ -74,13 +81,6 @@ onAddToCart,})=>{
 
 
 }
-
-
-
-
-
-
-  
 
 
 const styles = {

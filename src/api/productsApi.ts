@@ -9,7 +9,7 @@ export type DummyProduct = {
 };
 
 export type ProductVariant = {
-  size: number;
+  size: string;
   price: number;
 };
 
@@ -40,7 +40,12 @@ export async function fetchProducts(
     throw new Error("Failed to fetch products");
   }
 
-  const data: DummyProductsResponse = await res.json();
+  const data: {
+    products: DummyProduct[];
+    total: number;
+    skip: number;
+    limit: number;
+  } = await res.json();
 
   return data.products.map(transformDummyProduct);
 }
@@ -54,9 +59,9 @@ function transformDummyProduct(dummy: DummyProduct): Product {
     image: dummy.thumbnail,
     category: dummy.category,
     variants: [
-      { size: 66, price: basePrice },
-      { size: 77, price: Math.round(basePrice * 1.3) },
-      { size: 88, price: Math.round(basePrice * 1.6) },
+      { size: 'S', price: basePrice },
+      { size: 'M', price: Math.round(basePrice * 1.3) },
+      { size: 'L', price: Math.round(basePrice * 1.6) },
     ],
   };
 }
