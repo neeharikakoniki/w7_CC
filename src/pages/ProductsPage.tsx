@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchProducts, type Product } from "../api/productsApi";
+import { getProductsPage, type Product } from "../api/productsApi";
 import { ProductGrid } from "../components/ProductGrid";
 import { LoadMoreTrigger } from "../components/LoadMoreTrigger";
 
@@ -20,7 +20,7 @@ export function ProductsPage() {
     setError(null);
 
     try {
-      const newProducts = await fetchProducts(PAGE_SIZE, skip);
+      const newProducts = await getProductsPage(PAGE_SIZE, skip);
       setProducts(prev => [...prev, ...newProducts]);
 
       if (newProducts.length < PAGE_SIZE) {

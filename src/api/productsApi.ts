@@ -28,7 +28,10 @@ type DummyProductsResponse = {
   limit: number;
 };
 
-export async function fetchProducts(
+
+
+
+export async function getProductsPage(
   limit: number,
   skip: number
 ): Promise<Product[]> {
@@ -40,12 +43,7 @@ export async function fetchProducts(
     throw new Error("Failed to fetch products");
   }
 
-  const data: {
-    products: DummyProduct[];
-    total: number;
-    skip: number;
-    limit: number;
-  } = await res.json();
+  const data: DummyProductsResponse = await res.json();
 
   return data.products.map(transformDummyProduct);
 }
