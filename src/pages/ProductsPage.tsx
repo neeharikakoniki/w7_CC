@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getProductsPage, type Product } from "../api/productsApi";
 import { ProductGrid } from "../components/ProductGrid";
 import { LoadMoreTrigger } from "../components/LoadMoreTrigger";
+import SearchBar from "../components/SearchBar";
 
 const PAGE_SIZE = 12;
 
@@ -11,6 +12,9 @@ export function ProductsPage() {
   const [error, setError] = useState<string | null>(null);
   const [skip, setSkip] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
 
   async function loadNextPage(): Promise<void> {
     if (loading) return;
@@ -40,17 +44,34 @@ export function ProductsPage() {
       setLoading(false);
     }
   }
-  useEffect(() => {
-    loadNextPage();
 
-  }, []);
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 300);
+
+    return () => clearTimeout(id);
+  }, [query]);
+
+ 
+
+
   return (
     <div>
+       <SearchBar
+  value = {query}
+  onChange={setQuery}/>
+    {query !== debouncedQuery && (
+    <div style ={{marginBottom:12,color:"#666"}}>Searching..</div>
+  )}
       {products.length === 0 && loading && (
         <div> Loading Products..
         </div>)}
 
       {error && <div> {error}</div>}
+
+  
+  
       <ProductGrid products={products} />
       {hasMore && (
         <LoadMoreTrigger
