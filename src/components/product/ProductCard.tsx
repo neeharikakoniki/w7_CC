@@ -1,119 +1,74 @@
 import { useState } from 'react';
-import type  { Product } from '../../types/product';
+import type { Product } from '../../types/product';
 import VariantSelector from './VariantSelector';
 import PriceLabel from './PriceLabel';
 import { useMemo } from 'react';
-import { products } from '../../data/products';
 
-export type AddToCartPayload={
-   productId: string;
-    baseName: string;
-    size: number;
-    price: number;
+export type AddToCartPayload = {
+  productId: string;
+  baseName: string;
+  size: string | number;
+  price: number;
 };
 
 type ProductCardProps = {
   product: Product;
-  onAddToCart: (payload: AddToCartPayload) =>void;
+  onAddToCart: (payload: AddToCartPayload) => void;
 };
 
-export const ProductCard: React.FC<ProductCardProps>=({
-product,
-onAddToCart,})=>{
-  const[ variantIndex, setVariantIndex] = useState(0);
-  const hasVariants= product.variants.length >0 ;
-  const derived = useMemo(()=>
-  {
-    if(!hasVariants)
-    {
+export const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  onAddToCart,
+}) => {
+  const [variantIndex, setVariantIndex] = useState(0);
+  const hasVariants = product.variants.length > 0;
+  const derived = useMemo(() => {
+    if (!hasVariants) {
       return null;
     }
     const variant = product.variants[variantIndex];
     return {
-      displayName: `${product.name} ${variant.size}"`,
+      displayName: product.name,
       price: variant.price,
       size: variant.size,
     };
-  },[products, variantIndex, hasVariants]);
+  }, [product, variantIndex, hasVariants]);
 
-  const handleAddToCart=()=>{
-    if(!derived)
-    {
-      return ;
+  const handleAddToCart = () => {
+    if (!derived) {
+      return;
     }
 
     onAddToCart({
       productId: product.id,
-      baseName:product.name,
-      size:derived.size,
-      price:derived.price,
+      baseName: product.name,
+      size: derived.size,
+      price: derived.price,
     });
   };
- return (
-    <div
-      style={{
-        ...styles.card,
-      }}
-      >
-        <img
+  return (
+    <article className="product-card">
+      <img
+        className="product-image"
         src={product.image}
-        alt= {product.name}
-        style={styles.image}
-        
-        />
-      <h3>{derived ? derived.displayName: product.name}</h3>
-      <VariantSelector
-      variants={product.variants}
-      selectedIndex={variantIndex}
-      onChange={setVariantIndex}
+        alt={product.name}
       />
-
-    
+      <h3 className="product-name">{derived ? derived.displayName : product.name}</h3>
+      {derived && <PriceLabel price={derived.price} />}
+      <VariantSelector
+        variants={product.variants}
+        selectedIndex={variantIndex}
+        onChange={setVariantIndex}
+      />
       <button
+        className="add-button"
         onClick={handleAddToCart}
         disabled={!derived}
-        style={styles.addButton}
-        >
-          Add to Cart
-        </button>
-    </div>
+      >
+        Add to cart
+      </button>
+    </article>
   );
-
-
-}
-
-
-const styles = {
-  card: {
-    padding: '16px',
-    borderRadius: '8px',
-    border: '2px solid transparent',
-    backgroundColor: '#ffffff',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-  },
-  selected: {
-    borderColor: '#2563eb',
-    backgroundColor: '#eff6ff',
-  },
-  unselected: {
-    borderColor: '#e5e7eb',
-  },
-  image: {
-    width: '100%',
-    height: '150px',
-    objectFit: 'cover' as const,
-    marginBottom: '12px',
-  },
-  addButton:{
-    marginTop:'12px',
-    padding: '8px 12px',
-    backgroundColor: '#2563eb',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '6px',
-    cursor:'pointer',
-  },
 };
 
 export default ProductCard;

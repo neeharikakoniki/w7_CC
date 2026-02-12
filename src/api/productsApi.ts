@@ -33,7 +33,7 @@ type DummyProductsResponse = {
 
 export async function getProductsPage(
   limit: number,
-  skip: number
+  skip: number, 
 ): Promise<Product[]> {
   const res = await fetch(
     `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
