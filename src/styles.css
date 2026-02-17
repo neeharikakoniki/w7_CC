@@ -94,6 +94,18 @@ body {
   gap: 10px;
 }
 
+.filter-controls {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 10px;
+}
+
+.price-range {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
 .search-label {
   font-size: 0.9rem;
   color: var(--muted);
@@ -255,6 +267,10 @@ body {
   }
 
   .search-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-controls {
     grid-template-columns: 1fr;
   }
 

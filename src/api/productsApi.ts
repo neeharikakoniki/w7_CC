@@ -28,9 +28,6 @@ type DummyProductsResponse = {
   limit: number;
 };
 
-
-
-
 export async function getProductsPage(
   limit: number,
   skip: number, 
@@ -63,3 +60,5 @@ function transformDummyProduct(dummy: DummyProduct): Product {
     ],
   };
 }
+
+
