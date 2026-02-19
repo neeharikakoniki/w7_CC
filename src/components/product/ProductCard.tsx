@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 export type AddToCartPayload = {
   productId: string;
   baseName: string;
-  size: string | number;
+  size: number;
   price: number;
 };
 
@@ -36,6 +36,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleAddToCart = () => {
     if (!derived) {
+      return;
+    }
+    if (typeof derived.size !== 'number') {
       return;
     }
 
