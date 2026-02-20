@@ -9,7 +9,7 @@ export type DummyProduct = {
 };
 
 export type ProductVariant = {
-  size: string;
+  size: number;
   price: number;
 };
 
@@ -54,11 +54,10 @@ function transformDummyProduct(dummy: DummyProduct): Product {
     image: dummy.thumbnail,
     category: dummy.category,
     variants: [
-      { size: 'S', price: basePrice },
-      { size: 'M', price: Math.round(basePrice * 1.3) },
-      { size: 'L', price: Math.round(basePrice * 1.6) },
+      { size: 55, price: basePrice },
+      { size: 65, price: Math.round(basePrice * 1.3) },
+      { size: 75, price: Math.round(basePrice * 1.6) },
     ],
   };
 }
-
 

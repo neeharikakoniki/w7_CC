@@ -4,11 +4,14 @@ import type { Product } from "../types/product";
 import { ProductGrid } from "../components/ProductGrid";
 import { LoadMoreTrigger } from "../components/LoadMoreTrigger";
 import SearchBar from "../components/SearchBar";
+import { useCart } from "../cart/CartContext";
+import type { AddToCartPayload } from "../components/product/ProductCard";
 
 const PAGE_SIZE = 12;
 
 type Sort = "price-asc" | "price-desc" | null;
 export function ProductsPage() {
+  const { addItem } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -131,6 +134,10 @@ export function ProductsPage() {
     return list;
   }, [items, sort, priceRange]);
 
+  const handleAddToCart = (payload: AddToCartPayload): void => {
+    addItem(payload);
+  };
+
   return (
     <section className="products-page">
       <SearchBar
@@ -155,7 +162,7 @@ export function ProductsPage() {
 
       {error && <div className="error-note">{error}</div>}
 
-      <ProductGrid products={processed} />
+      <ProductGrid products={processed} onAddToCart={handleAddToCart} />
       {products.length > 0 && processed.length === 0 && (
         <div className="status-note">No products match your search/filter.</div>
       )}

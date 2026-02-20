@@ -1,15 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Product } from '../../types/product';
 import VariantSelector from './VariantSelector';
 import PriceLabel from './PriceLabel';
-import { useMemo } from 'react';
+import type { CartItem } from '../../types/cart';
 
-export type AddToCartPayload = {
-  productId: string;
-  baseName: string;
-  size: number;
-  price: number;
-};
+export type AddToCartPayload = Omit<CartItem, 'quantity'>;
 
 type ProductCardProps = {
   product: Product;
@@ -21,6 +16,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
 }) => {
   const [variantIndex, setVariantIndex] = useState(0);
+  const [showAdded, setShowAdded] = useState(false);
   const hasVariants = product.variants.length > 0;
   const derived = useMemo(() => {
     if (!hasVariants) {
@@ -38,9 +34,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     if (!derived) {
       return;
     }
-    if (typeof derived.size !== 'number') {
-      return;
-    }
 
     onAddToCart({
       productId: product.id,
@@ -48,7 +41,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       size: derived.size,
       price: derived.price,
     });
+    setShowAdded(true);
   };
+
+  useEffect(() => {
+    if (!showAdded) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowAdded(false);
+    }, 1400);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [showAdded]);
+
   return (
     <article className="product-card">
       <img
@@ -64,12 +73,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         onChange={setVariantIndex}
       />
       <button
+        type="button"
         className="add-button"
         onClick={handleAddToCart}
         disabled={!derived}
       >
         Add to cart
       </button>
+      {showAdded && <p className="added-note">Added to cart</p>}
     </article>
   );
 };

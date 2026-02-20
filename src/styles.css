@@ -77,6 +77,13 @@ body {
   line-height: 1.1;
 }
 
+.header-cart-count {
+  margin: 8px 0 0;
+  color: var(--accent-strong);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
 .products-page {
   display: grid;
   gap: 16px;
@@ -255,6 +262,13 @@ body {
 .add-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.added-note {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--accent-strong);
 }
 
 .pagination-note {

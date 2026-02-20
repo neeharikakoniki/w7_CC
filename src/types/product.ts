@@ -1,5 +1,5 @@
 export type ProductVariant = {
-  size: string | number;
+  size: number;
   price: number;
 };
 

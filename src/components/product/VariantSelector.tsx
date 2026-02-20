@@ -23,6 +23,7 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
         const isDisabled = variants.length === 1;
         return (
           <button
+            type="button"
             key={variant.size}
             disabled={isDisabled}
             onClick={() => {
